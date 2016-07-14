@@ -14,7 +14,7 @@ publish: build
 test: build
 	docker-compose up -d
 	docker-compose run --rm accumulo-master bash -c "set -e \
-		&& source /sbin/hdfs-lib.sh \
-		&& wait_until_hdfs_is_available \
-		&& accumulo shell -p GisPwd -e 'createtable test_table'"
-	docker-compose kill
+		&& source /sbin/accumulo-lib.sh \
+		&& wait_until_accumulo_is_available \
+		&& accumulo shell -p GisPwd -e 'info'"
+	docker-compose down
