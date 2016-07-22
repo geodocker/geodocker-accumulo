@@ -13,7 +13,6 @@ sed -i.bak \
   -e "s/{HADOOP_MASTER_ADDRESS}/${HADOOP_MASTER_ADDRESS}/g" \
   -e "s/{ACCUMULO_ZOOKEEPERS}/${ACCUMULO_ZOOKEEPERS}/g" \
   -e "s/{ACCUMULO_SECRET}/${ACCUMULO_SECRET}/g" \
-  -e "s/{ACCUMULO_PASSWORD}/${ACCUMULO_PASSWORD}/g" \
   ${ACCUMULO_CONF_DIR}/accumulo-site.xml
 
 # The first argument determines this container's role in the accumulo cluster
@@ -26,7 +25,6 @@ else
     "master" | "tserver" | "monitor" | "gc" | "tracer")
       ATTEMPTS=7 # ~2 min before timeout failure
       wait_until_port_open ${ACCUMULO_ZOOKEEPERS} 2181 || exit 1
-      wait_until_port_open ${HADOOP_MASTER_ADDRESS} 8020 || exit 1
       wait_until_hdfs_is_available || exit 1
 
       USER=${USER:-root}
