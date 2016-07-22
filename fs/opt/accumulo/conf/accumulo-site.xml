@@ -24,7 +24,7 @@
   </property>
   <property>
     <name>instance.zookeeper.host</name>
-    <value>{ACCUMULO_ZOOKEEPERS}</value>
+    <value>{ZOOKEEPERS}</value>
     <description>comma separated list of zookeeper servers</description>
   </property>
   <property>

@@ -64,7 +64,7 @@ fi
 YARN_RM=$(xmllint --xpath "//property[name='yarn.resourcemanager.hostname']/value/text()"  /etc/hadoop/conf/yarn-site.xml)
 DOCKER_ENV="-e USER=hadoop \
 -e HADOOP_MASTER_ADDRESS=$YARN_RM \
--e ACCUMULO_ZOOKEEPERS=$YARN_RM \
+-e ZOOKEEPERS=$YARN_RM \
 -e ACCUMULO_SECRET=$ACCUMULO_SECRET \
 -e ACCUMULO_PASSWORD=$ACCUMULO_PASSWORD \
 -e INSTANCE_NAME=$INSTANCE_NAME"

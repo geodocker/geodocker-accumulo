@@ -11,7 +11,7 @@ INSTANCE_NAME=${INSTANCE_NAME:-accumulo}
 sed -i.bak "s/{HADOOP_MASTER_ADDRESS}/${HADOOP_MASTER_ADDRESS}/g" ${HADOOP_CONF_DIR}/core-site.xml
 sed -i.bak \
   -e "s/{HADOOP_MASTER_ADDRESS}/${HADOOP_MASTER_ADDRESS}/g" \
-  -e "s/{ACCUMULO_ZOOKEEPERS}/${ACCUMULO_ZOOKEEPERS}/g" \
+  -e "s/{ZOOKEEPERS}/${ZOOKEEPERS}/g" \
   -e "s/{ACCUMULO_SECRET}/${ACCUMULO_SECRET}/g" \
   ${ACCUMULO_CONF_DIR}/accumulo-site.xml
 
@@ -24,7 +24,7 @@ else
   case $ROLE in
     "master" | "tserver" | "monitor" | "gc" | "tracer")
       ATTEMPTS=7 # ~2 min before timeout failure
-      wait_until_port_open ${ACCUMULO_ZOOKEEPERS} 2181 || exit 1
+      wait_until_port_open ${ZOOKEEPERS} 2181 || exit 1
       wait_until_hdfs_is_available || exit 1
 
       USER=${USER:-root}
