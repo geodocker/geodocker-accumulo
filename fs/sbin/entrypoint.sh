@@ -4,6 +4,9 @@ IFS=$'\n\t'
 source /sbin/hdfs-lib.sh
 source /sbin/accumulo-lib.sh
 
+ACCUMULO_SECRET=${ACCUMULO_SECRET:-DEFAULT}
+INSTANCE_NAME=${INSTANCE_NAME:-accumulo}
+
 # Run in all cases
 sed -i.bak "s/{HADOOP_MASTER_ADDRESS}/${HADOOP_MASTER_ADDRESS}/g" ${HADOOP_CONF_DIR}/core-site.xml
 sed -i.bak \
