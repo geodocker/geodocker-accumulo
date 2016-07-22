@@ -31,6 +31,7 @@ else
       ensure_user $USER
       echo "Running as $USER"
 
+      # Initilize Accumulo if required
       if [[ ($ROLE = "master") && (${2:-} = "--auto-init")]]; then
         set +e
         accumulo info
@@ -42,6 +43,10 @@ else
           echo "Found accumulo instance at hdfs://${HADOOP_MASTER_ADDRESS}/accumulo ..."
         fi
         set -e
+      fi
+
+      if [[ $ROLE = "master" ]]; then
+        runuser -p -u $USER -- sleep 10 && /sbin/enable-iterators.sh &
       else
         with_backoff hdfs dfs -test -d /accumulo
         if [ $? != 0 ]; then
@@ -49,6 +54,7 @@ else
           exit 1
         fi
       fi
+
       exec runuser -p -u $USER accumulo -- $ROLE ;;
     *)
       exec "$@"
