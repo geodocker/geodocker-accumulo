@@ -17,7 +17,7 @@
 -->
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 
-<configuration>  
+<configuration>
   <property>
     <name>instance.volumes</name>
     <value>hdfs://{HADOOP_MASTER_ADDRESS}/accumulo</value>
@@ -43,12 +43,12 @@
     </description>
   </property> -->
   <property>
-    <name>general.dynamic.classpaths</name>    
+    <name>general.dynamic.classpaths</name>
     <value>
       $ACCUMULO_HOME/lib/ext/[^.].*.jar,
       hdfs://{HADOOP_MASTER_ADDRESS}/accumulo-classpath/[^.].*.jar
     </value>
-    <description>Classpaths that accumulo checks for updates and class files.</description>    
+    <description>Classpaths that accumulo checks for updates and class files.</description>
   </property>
   <property>
     <name>logger.dir.walog</name>
@@ -83,10 +83,10 @@
     <name>tserver.cache.index.size</name>
     <value>128M</value>
   </property>
-  <property>
-    <name>trace.token.property.password</name>    
-    <value>{ACCUMULO_PASSWORD}</value>
-  </property>
+  <!-- <property>
+    <name>trace.token.property.password</name>
+    <value>{ACCUMULO_TRACE_PASSWORD}</value>
+  </property> -->
   <!-- Kerberos requirements --><!--
   <property>
     <name>instance.rpc.sasl.enabled</name>
