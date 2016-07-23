@@ -12,6 +12,9 @@ ENV GEOMESA_VERSION 1.2.4
 ENV GEOMESA_DIST /opt/geomesa
 ENV GEOMESA_HOME ${GEOMESA_DIST}/tools
 
+ENV GEOWAVE_VERSION 0.9.1
+ENV GEOWAVE_HOME /usr/local/geowave
+
 ENV PATH $PATH:$ACCUMULO_HOME/bin:$GEOMESA_HOME/bin
 
 # Accumulo and Zookeeper client
@@ -42,6 +45,11 @@ RUN set -x \
   && rm -rf ${GEOMESA_DIST}/web-services \
   && rm -rf ${GEOMESA_DIST}/spark
 
+# GeoWave Iterators
+RUN set -x \
+  && rpm -Uvh --replacepkgs http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm \
+  && yum --enablerepo=geowave install -y geowave-${GEOWAVE_VERSION}-apache-accumulo \
+  && yum --enablerepo=geowave install -y geowave-${GEOWAVE_VERSION}-apache-tools
 
 WORKDIR "${ACCUMULO_HOME}"
 COPY ./fs /
