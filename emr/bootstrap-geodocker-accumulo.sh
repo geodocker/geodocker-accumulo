@@ -75,6 +75,7 @@ if is_master ; then
     docker run $DOCKER_OPT --name=accumulo-monitor $DOCKER_ENV $IMAGE monitor
     docker run $DOCKER_OPT --name=accumulo-tracer $DOCKER_ENV $IMAGE tracer
     docker run $DOCKER_OPT --name=accumulo-gc $DOCKER_ENV $IMAGE gc
+    docker run $DOCKER_OPT --name=geoserver quay.io/geodocker/geoserver:latest
 else # is worker
     docker run -d --net=host --name=accumulo-tserver $DOCKER_ENV $IMAGE tserver
 fi
