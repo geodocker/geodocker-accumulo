@@ -64,7 +64,7 @@ fi
 YARN_RM=$(xmllint --xpath "//property[name='yarn.resourcemanager.hostname']/value/text()"  /etc/hadoop/conf/yarn-site.xml)
 DOCKER_ENV="-e USER=hadoop \
 -e HADOOP_MASTER_ADDRESS=$YARN_RM \
--e ACCUMULO_ZOOKEEPERS=$YARN_RM \
+-e ZOOKEEPERS=$YARN_RM \
 -e ACCUMULO_SECRET=$ACCUMULO_SECRET \
 -e ACCUMULO_PASSWORD=$ACCUMULO_PASSWORD \
 -e INSTANCE_NAME=$INSTANCE_NAME"
@@ -75,6 +75,7 @@ if is_master ; then
     docker run $DOCKER_OPT --name=accumulo-monitor $DOCKER_ENV $IMAGE monitor
     docker run $DOCKER_OPT --name=accumulo-tracer $DOCKER_ENV $IMAGE tracer
     docker run $DOCKER_OPT --name=accumulo-gc $DOCKER_ENV $IMAGE gc
+    docker run $DOCKER_OPT --name=geoserver quay.io/geodocker/geoserver:latest
 else # is worker
     docker run -d --net=host --name=accumulo-tserver $DOCKER_ENV $IMAGE tserver
 fi

@@ -29,10 +29,8 @@ services:
       command: master --auto-init
       environment:
         HADOOP_MASTER_ADDRESS: hdfs-name
-        ACCUMULO_ZOOKEEPERS: zookeeper
-        ACCUMULO_SECRET: secret
+        ZOOKEEPERS: zookeeper
         ACCUMULO_PASSWORD: GisPwd
-        INSTANCE_NAME: gis
       depends_on:
         - zookeeper
     accumulo-monitor:
@@ -40,9 +38,7 @@ services:
         command: monitor
         environment:
           HADOOP_MASTER_ADDRESS: hdfs-name
-          ACCUMULO_ZOOKEEPERS: zookeeper
-          ACCUMULO_SECRET: secret
-          ACCUMULO_PASSWORD: GisPwd
+          ZOOKEEPERS: zookeeper
         ports:
           - 50095:50095
         depends_on:
@@ -53,9 +49,7 @@ services:
         command: tserver
         environment:
           HADOOP_MASTER_ADDRESS: hdfs-name
-          ACCUMULO_ZOOKEEPERS: zookeeper
-          ACCUMULO_SECRET: secret
-          ACCUMULO_PASSWORD: GisPwd
+          ZOOKEEPERS: zookeeper
         depends_on:
           - zookeeper
           - accumulo-master
