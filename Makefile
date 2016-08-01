@@ -9,7 +9,7 @@ build:
 publish: build
 	docker push ${IMG}:latest
 	if [ "${TAG}" != "" -a "${TAG}" != "latest" ]; then docker tag ${IMG}:latest ${IMG}:${TAG} && docker push ${IMG}:${TAG}; fi
-	
+
 test: build
 	docker-compose up -d
 	docker-compose run --rm accumulo-master bash -c "set -e \
