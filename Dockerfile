@@ -8,13 +8,6 @@ ENV ACCUMULO_CONF_DIR $ACCUMULO_HOME/conf
 
 ENV ZOOKEEPER_HOME /usr/lib/zookeeper
 
-ENV GEOMESA_VERSION 1.2.4
-ENV GEOMESA_DIST /opt/geomesa
-ENV GEOMESA_HOME ${GEOMESA_DIST}/tools
-
-ENV GEOWAVE_VERSION 0.9.1
-ENV GEOWAVE_HOME /usr/local/geowave
-
 ENV PATH $PATH:$ACCUMULO_HOME/bin:$GEOMESA_HOME/bin
 
 # Accumulo and Zookeeper client
@@ -30,26 +23,6 @@ RUN set -x \
   && yum remove -y make gcc-c++ \
   && yum -y autoremove
   # TODO: Clean up after build_native_library
-
-# GeoMesa Iterators
-RUN set -x \
-  && mkdir -p ${GEOMESA_DIST} \
-  && curl -sS -L http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-dist/${GEOMESA_VERSION}/geomesa-dist-${GEOMESA_VERSION}-bin.tar.gz \
-  | tar -zx -C ${GEOMESA_DIST} --strip-components=2  geomesa-${GEOMESA_VERSION}/dist \
-  && tar -xzf ${GEOMESA_DIST}/tools/geomesa-tools-${GEOMESA_VERSION}-bin.tar.gz --strip-components=1 -C ${GEOMESA_DIST}/tools \
-  && ${GEOMESA_DIST}/tools/bin/install-jai.sh \
-  && ${GEOMESA_DIST}/tools/bin/install-jline.sh \
-  && rm -f ${GEOMESA_DIST}/tools/geomesa-tools-${GEOMESA_VERSION}-bin.tar.gz \
-  && rm -rf ${GEOMESA_DIST}/gs-plugins \
-  && rm -rf ${GEOMESA_DIST}/hadoop \
-  && rm -rf ${GEOMESA_DIST}/web-services \
-  && rm -rf ${GEOMESA_DIST}/spark
-
-# GeoWave Iterators
-RUN set -x \
-  && rpm -Uvh --replacepkgs http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm \
-  && yum --enablerepo=geowave install -y geowave-${GEOWAVE_VERSION}-apache-accumulo \
-  && yum --enablerepo=geowave install -y geowave-${GEOWAVE_VERSION}-apache-tools
 
 WORKDIR "${ACCUMULO_HOME}"
 COPY ./fs /
