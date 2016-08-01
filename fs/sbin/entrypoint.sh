@@ -24,7 +24,7 @@ else
   case $ROLE in
     "master" | "tserver" | "monitor" | "gc" | "tracer")
       ATTEMPTS=7 # ~2 min before timeout failure
-      wait_until_port_open ${ZOOKEEPERS} 2181 || exit 1
+      with_backoff zookeeper_is_available || exit 1
       wait_until_hdfs_is_available || exit 1
 
       USER=${USER:-root}
@@ -45,14 +45,8 @@ else
         set -e
       fi
 
-      if [[ $ROLE = "master" ]]; then
-        runuser -p -u $USER -- sleep 10 && /sbin/enable-iterators.sh &
-      else
-        with_backoff hdfs dfs -test -d /accumulo
-        if [ $? != 0 ]; then
-          echo "Accumulo not initilized before timeout. Exiting ..."
-          exit 1
-        fi
+      if [[ $ROLE != "master" ]]; then
+        with_backoff accumulo_is_available || exit 1
       fi
 
       exec runuser -p -u $USER accumulo -- $ROLE ;;
