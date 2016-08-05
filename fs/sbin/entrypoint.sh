@@ -17,6 +17,7 @@ sed -i.bak \
 
 # The first argument determines this container's role in the accumulo cluster
 ROLE=${1:-}
+echo "Executing with role: $ROLE"
 if [ -z $ROLE ]; then
   echo "Select the role for this container with the docker cmd 'master', 'monitor', 'gc', 'tracer', or 'tserver'"
   exit 1
@@ -24,7 +25,9 @@ else
   case $ROLE in
     "master" | "tserver" | "monitor" | "gc" | "tracer")
       ATTEMPTS=7 # ~2 min before timeout failure
+      echo "Checking zookeeper availability ..."
       with_backoff zookeeper_is_available || exit 1
+      echo "Zookeeper is now available ..."
       wait_until_hdfs_is_available || exit 1
 
       USER=${USER:-root}
@@ -34,8 +37,7 @@ else
       # Initilize Accumulo if required
       if [[ ($ROLE = "master") && (${2:-} = "--auto-init")]]; then
         set +e
-        accumulo info
-        if [[ $? != 0 ]]; then
+        if [[ $(accumulo info) != 0 ]]; then
           echo "Initilizing accumulo instance ${INSTANCE_NAME} at hdfs://${HADOOP_MASTER_ADDRESS}/accumulo ..."
           runuser -p -u $USER hdfs -- dfs -mkdir -p /accumulo-classpath
           runuser -p -u $USER accumulo -- init --instance-name ${INSTANCE_NAME} --password ${ACCUMULO_PASSWORD}
