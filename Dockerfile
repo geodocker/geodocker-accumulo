@@ -5,10 +5,8 @@ MAINTAINER Pomadchin Grigory, daunnc@gmail.com
 ENV ACCUMULO_VERSION 1.7.2
 ENV ACCUMULO_HOME /opt/accumulo
 ENV ACCUMULO_CONF_DIR $ACCUMULO_HOME/conf
-
 ENV ZOOKEEPER_HOME /usr/lib/zookeeper
-
-ENV PATH $PATH:$ACCUMULO_HOME/bin:$GEOMESA_HOME/bin
+ENV PATH=$PATH:$ACCUMULO_HOME/bin
 
 # Accumulo and Zookeeper client
 RUN set -x \
