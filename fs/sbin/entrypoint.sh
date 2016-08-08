@@ -1,19 +1,19 @@
 #! /usr/bin/env bash
 set -euo pipefail
 IFS=$'\n\t'
-source /sbin/hdfs-lib.sh
 source /sbin/accumulo-lib.sh
 
 ACCUMULO_SECRET=${ACCUMULO_SECRET:-DEFAULT}
 INSTANCE_NAME=${INSTANCE_NAME:-accumulo}
 
-# Run in all cases
-sed -i.bak "s/{HADOOP_MASTER_ADDRESS}/${HADOOP_MASTER_ADDRESS}/g" ${HADOOP_CONF_DIR}/core-site.xml
-sed -i.bak \
-  -e "s/{HADOOP_MASTER_ADDRESS}/${HADOOP_MASTER_ADDRESS}/g" \
-  -e "s/{ZOOKEEPERS}/${ZOOKEEPERS}/g" \
-  -e "s/{ACCUMULO_SECRET}/${ACCUMULO_SECRET}/g" \
-  ${ACCUMULO_CONF_DIR}/accumulo-site.xml
+# HDFS Configuration
+template $HADOOP_CONF_DIR/core-site.xml
+
+# Accumulo Configuration
+# core-site.xml could have been volume mounted, use it as default
+DEFAULT_FS=$(xmllint --xpath "//property[name='fs.defaultFS']/value/text()"  $HADOOP_CONF_DIR/core-site.xml)
+INSTANCE_VOLUME=${INSTANCE_VOLUME:-$DEFAULT_FS/$INSTANCE_NAME}
+template $ACCUMULO_CONF_DIR/accumulo-site.xml
 
 # The first argument determines this container's role in the accumulo cluster
 ROLE=${1:-}
@@ -34,7 +34,7 @@ else
       # Initilize Accumulo if required
       if [[ ($ROLE = "master") && (${2:-} = "--auto-init")]]; then
         set +e
-        accumulo info
+        accumulo info &> /dev/null
         if [[ $? != 0 ]]; then
           echo "Initilizing accumulo instance ${INSTANCE_NAME} at hdfs://${HADOOP_MASTER_ADDRESS}/accumulo ..."
           runuser -p -u $USER hdfs -- dfs -mkdir -p /accumulo-classpath
