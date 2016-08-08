@@ -10,8 +10,6 @@ ENV PATH=$PATH:$ACCUMULO_HOME/bin
 
 # Accumulo and Zookeeper client
 RUN set -x \
-  && curl http://archive.apache.org/dist/bigtop/bigtop-1.1.0/repos/centos7/bigtop.repo > /etc/yum.repos.d/bigtop.repo \
-  && yum -y install zookeeper \
   && mkdir -p ${ACCUMULO_HOME} ${ACCUMULO_CONF_DIR} \
   && curl -sS -# http://apache.mirrors.pair.com/accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz \
   | tar -xz -C ${ACCUMULO_HOME} --strip-components=1 \
