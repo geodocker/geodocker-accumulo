@@ -20,8 +20,7 @@ RUN set -x \
   && cp ${ACCUMULO_HOME}/conf/examples/3GB/standalone/* ${ACCUMULO_CONF_DIR}/ \
   && yum install -y make gcc-c++ \
   && bash -c "${ACCUMULO_HOME}/bin/build_native_library.sh" \
-  && yum remove -y make gcc-c++ \
-  && yum -y autoremove
+  && yum -y autoremove gcc-c++
   # TODO: Clean up after build_native_library
 
 WORKDIR "${ACCUMULO_HOME}"
