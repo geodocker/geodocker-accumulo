@@ -31,12 +31,12 @@ else
       ensure_user $USER
       echo "Running as $USER"
 
-      # Initilize Accumulo if required
+      # Initialize Accumulo if required
       if [[ ($ROLE = "master") && (${2:-} = "--auto-init")]]; then
         set +e
         accumulo info &> /dev/null
         if [[ $? != 0 ]]; then
-          echo "Initilizing accumulo instance ${INSTANCE_NAME} at hdfs://${HADOOP_MASTER_ADDRESS}/accumulo ..."
+          echo "Initializing accumulo instance ${INSTANCE_NAME} at hdfs://${HADOOP_MASTER_ADDRESS}/accumulo ..."
           runuser -p -u $USER hdfs -- dfs -mkdir -p /accumulo-classpath
           runuser -p -u $USER accumulo -- init --instance-name ${INSTANCE_NAME} --password ${ACCUMULO_PASSWORD}
         else
