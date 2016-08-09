@@ -33,20 +33,17 @@ else
 
       # Initilize Accumulo if required
       if [[ ($ROLE = "master") && (${2:-} = "--auto-init")]]; then
-        set +e
-        accumulo info &> /dev/null
-        if [[ $? != 0 ]]; then
-          echo "Initilizing accumulo instance ${INSTANCE_NAME} at hdfs://${HADOOP_MASTER_ADDRESS}/accumulo ..."
+        if accumulo_instance_exists $INSTANCE_NAME; then
+          echo "Found accumulo instance at: $INSTANCE_VOLUME"
+        else
+          echo "Initilizing accumulo instance $INSTANCE_VOLUME ..."
           runuser -p -u $USER hdfs -- dfs -mkdir -p /accumulo-classpath
           runuser -p -u $USER accumulo -- init --instance-name ${INSTANCE_NAME} --password ${ACCUMULO_PASSWORD}
-        else
-          echo "Found accumulo instance at hdfs://${HADOOP_MASTER_ADDRESS}/accumulo ..."
         fi
-        set -e
       fi
 
       if [[ $ROLE != "master" ]]; then
-        with_backoff accumulo_is_available || exit 1
+        with_backoff accumulo_instance_exists $INSTANCE_NAME || exit 1
       fi
 
       exec runuser -p -u $USER accumulo -- $ROLE ;;

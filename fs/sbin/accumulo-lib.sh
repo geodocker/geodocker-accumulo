@@ -2,21 +2,27 @@
 
 source /sbin/hdfs-lib.sh
 
-wait_until_accumulo_is_available(){
+function accumulo_instance_exists() {
+  local INSTANCE=$1
+  local LS=$(zookeeper-client -server $ZOOKEEPERS ls /accumulo/instances/$INSTANCE 2>&1 > /dev/null)
+  if [[ $LS == *"does not exist"* ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function wait_until_accumulo_is_available() {
+  local INSTANCE=${1:-accumulo}
   wait_until_hdfs_is_available
-  with_backoff hdfs dfs -test -d /accumulo
+  with_backoff accumulo_instance_exists $INSTANCE
 }
 
-accumulo_is_available(){
-  hdfs dfs -test -d /accumulo
-  return $?
-}
-
-zookeeper_is_available(){
+function zookeeper_is_available(){
   [ $(nc ${ZOOKEEPERS} 2181 <<< ruok) == imok ]
   return $?
 }
 
-ensure_user() {
+function ensure_user() {
   if [ ! $(id -u $1) ]; then useradd $1; fi
 }

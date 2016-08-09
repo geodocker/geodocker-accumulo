@@ -4,8 +4,8 @@ services:
 - docker
 env:
   global:
-  - DOCKER_VERSION=1.11.2-0~trusty
-  - DOCKER_COMPOSE_VERSION=1.8.0-rc2
+  - DOCKER_VERSION=1.12.0-0~trusty
+  - DOCKER_COMPOSE_VERSION=1.8.0
   - ORG=${TRAVIS_REPO_SLUG%/*}
   - REPO=${TRAVIS_REPO_SLUG##*-}
   - TAG=${TRAVIS_TAG:-${TRAVIS_COMMIT:0:7}}
