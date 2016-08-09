@@ -15,13 +15,13 @@ before_install:
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv -f docker-compose /usr/local/bin
-- export PATH="$PATH:$HOME/.rvm/bin"
 install:
 - make -e build
 script:
 - make -e test
 before_deploy:
 - docker login -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
+- export PATH="$PATH:$HOME/.rvm/bin"
 deploy:
 - provider: script
   script: make -e publish
