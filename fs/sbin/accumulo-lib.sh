@@ -24,5 +24,5 @@ function zookeeper_is_available(){
 }
 
 function ensure_user() {
-  if [ ! $(id -u $1) ]; then useradd $1; fi
+  if [ ! $(id -u $1) ]; then useradd $1 -g root; fi
 }
