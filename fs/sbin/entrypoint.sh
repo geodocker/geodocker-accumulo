@@ -37,7 +37,7 @@ else
           echo "Found accumulo instance at: $INSTANCE_VOLUME"
         else
           echo "Initilizing accumulo instance $INSTANCE_VOLUME ..."
-          runuser -p -u $USER hdfs -- dfs -mkdir -p /accumulo-classpath
+          runuser -p -u $USER hdfs -- dfs -mkdir -p ${INSTANCE_VOLUME}-classpath
           runuser -p -u $USER accumulo -- init --instance-name ${INSTANCE_NAME} --password ${ACCUMULO_PASSWORD}
         fi
       fi
