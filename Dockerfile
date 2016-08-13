@@ -1,18 +1,19 @@
 FROM quay.io/geodocker/hdfs:latest
 
-MAINTAINER Pomadchin Grigory, daunnc@gmail.com
+MAINTAINER Pomadchin Grigory <daunnc@gmail.com>
 
-ENV ACCUMULO_VERSION 1.7.2
+ARG ACCUMULO_VERSION
+ENV ACCUMULO_VERSION ${ACCUMULO_VERSION}
 ENV ACCUMULO_HOME /opt/accumulo
 ENV ACCUMULO_CONF_DIR $ACCUMULO_HOME/conf
 ENV ZOOKEEPER_HOME /usr/lib/zookeeper
 ENV PATH=$PATH:$ACCUMULO_HOME/bin
 
+ADD accumulo-${ACCUMULO_VERSION}-bin.tar.gz /opt
+
 # Accumulo and Zookeeper client
 RUN set -x \
-  && mkdir -p ${ACCUMULO_HOME} ${ACCUMULO_CONF_DIR} \
-  && curl -sS -# http://apache.mirrors.pair.com/accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz \
-  | tar -xz -C ${ACCUMULO_HOME} --strip-components=1 \
+  && mv /opt/accumulo-${ACCUMULO_VERSION} ${ACCUMULO_HOME} \
   && yum install -y make gcc-c++ \
   && bash -c "${ACCUMULO_HOME}/bin/build_native_library.sh" \
   && yum -y autoremove gcc-c++
