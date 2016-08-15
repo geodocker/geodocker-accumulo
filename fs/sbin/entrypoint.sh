@@ -39,6 +39,11 @@ else
           echo "Initilizing accumulo instance $INSTANCE_VOLUME ..."
           runuser -p -u $USER hdfs -- dfs -mkdir -p ${INSTANCE_VOLUME}-classpath
           runuser -p -u $USER accumulo -- init --instance-name ${INSTANCE_NAME} --password ${ACCUMULO_PASSWORD}
+
+	  if [[ -n ${POSTINIT:-} ]]; then
+	     echo "Post-initializing accumulo instance $INSTANCE_VOLUME ..."
+	     (setsid $POSTINIT &> /tmp/${INSTANCE_NAME}-postinit.log &)
+	  fi
         fi
       fi
 
