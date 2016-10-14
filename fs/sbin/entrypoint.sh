@@ -32,7 +32,7 @@ else
   case $ROLE in
     "master" | "tserver" | "monitor" | "gc" | "tracer")
       ATTEMPTS=7 # ~2 min before timeout failure
-      with_backoff zookeeper_is_available || exit 1
+      with_backoff zookeeper_is_available "$ZOOKEEPERS" || exit 1
       wait_until_hdfs_is_available || exit 1
 
       USER=${USER:-root}
@@ -41,7 +41,7 @@ else
 
       # Initilize Accumulo if required
       if [[ ($ROLE = "master") && (${2:-} = "--auto-init")]]; then
-        if accumulo_instance_exists $INSTANCE_NAME; then
+        if accumulo_instance_exists $INSTANCE_NAME $ZOOKEEPERS; then
           echo "Found accumulo instance at: $INSTANCE_VOLUME"
         else
           echo "Initilizing accumulo instance $INSTANCE_VOLUME ..."
@@ -56,7 +56,7 @@ else
       fi
 
       if [[ $ROLE != "master" ]]; then
-        with_backoff accumulo_instance_exists $INSTANCE_NAME || exit 1
+        with_backoff accumulo_instance_exists $INSTANCE_NAME $ZOOKEEPERS || exit 1
       fi
 
       exec runuser -p -u $USER accumulo -- $ROLE ;;
