@@ -3,8 +3,16 @@ set -euo pipefail
 IFS=$'\n\t'
 source /sbin/accumulo-lib.sh
 
-ACCUMULO_SECRET=${ACCUMULO_SECRET:-DEFAULT}
-INSTANCE_NAME=${INSTANCE_NAME:-accumulo}
+# Set default configurations if not provided
+: ${ACCUMULO_SECRET:=DEFAULT}
+: ${INSTANCE_NAME:=accumulo}
+: ${TSERVER_CACHE_DATA_SIZE:=128MB}
+: ${TSERVER_CACHE_INDEX_SIZE:=128MB}
+: ${TSERVER_MEMORY_MAPS_MAX:=1G}
+: ${TSERVER_XMX:=3g}
+: ${MASTER_XMX:=2g}
+: ${MONITOR_XMX:=1g}
+: ${GC_XMX:=1g}
 
 # HDFS Configuration
 template $HADOOP_CONF_DIR/core-site.xml

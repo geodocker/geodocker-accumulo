@@ -19,9 +19,17 @@ This container has three roles that can be supplied as `CMD`:
 # Environment
   - `HADOOP_MASTER_ADDRESS` - hostname for accumulo root, required for all roles
   - `ZOOKEEPERS` - list of zookeeper instance, at least one
-  - `ACCUMULO_SECRET` - secret value for inter-instance communication
-  - `INSTANCE_NAME` - accumulo instance name
+  - `ACCUMULO_SECRET` - secret value for inter-instance communication (default: `DEFAULT`)
+  - `INSTANCE_NAME` - accumulo instance name (default: `accumulo`)
   - `ACCUMULO_PASSWORD` - root password
+  - `TSERVER_XMX` - JVM `-Xmx` parameter value for Accumulo tserver (default: `3g`)
+  - `MASTER_XMX` - JVM `-Xmx` parameter value for Accumulo master (default: `2g`)
+  - `MONITOR_XMX` - JVM `-Xmx` parameter value for Accumulo monitor (default: `1g`)
+  - `GC_XMX` - JVM `-Xmx` parameter value for Accumulo garbage collector (default: `1g`)
+  - `TSERVER_CACHE_DATA_SIZE` - `tserver.cache.data.size` in `accumulo-site.xml`
+  - `TSERVER_CACHE_INDEX_SIZE` - `tserver.cache.index.size` in `accumulo-site.xml`
+  - `TSERVER_MEMORY_MAPS_MAX` - `tserver.memory.maps.max` in `accumulo-site.xml`
+
 
 # Testing
 This container should be tested with `docker-compose` and through `make test`

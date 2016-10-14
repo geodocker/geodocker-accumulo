@@ -8,8 +8,9 @@ The script is parametrized on following arguments:
 
   - `-i | --image` docker image to be used for accumulo
   - `-s | --accumulo-secret` accumulo secret to be used
-  - `-p |--accumulo-password` accumulo password for root account
+  - `-p | --accumulo-password` accumulo password for root account
   - `-n | --instance-name` accumulo instance name
+  - `-e | --env` additional environment variables for docker containers
 
 These parameters have default values defined at the top of the bootstrap script.
 
@@ -19,7 +20,7 @@ In order to use this bootstrap script it should be copied to an S3 bucket under 
 
 ```console
 aws emr create-cluster --name "GeoDocker Accumulo" \
---release-label emr-4.7.2 \
+--release-label emr-5.0.0 \
 --output text \
 --use-default-roles \
 --ec2-attributes KeyName=geotrellis-cluster \
@@ -29,5 +30,6 @@ Name=Master,BidPrice=0.5,InstanceCount=1,InstanceGroupType=MASTER,InstanceType=m
 Name=Workers,BidPrice=0.5,InstanceCount=1,InstanceGroupType=CORE,InstanceType=m3.xlarge \
 --bootstrap-actions \
 Name=BootstrapGeoWave,Path=s3://geotrellis-test/geodocker/bootstrap-geodocker-accumulo.sh,\
-Args=[-i=quay.io/geodocker/accumulo:latest,-n=gis,-p=secret]
+Args=[-i=quay.io/geodocker/accumulo:latest,-n=gis,-p=secret,\
+-e=TSERVER_XMX=10G,-e=TSERVER_CACHE_DATA_SIZE=6G,-e=TSERVER_CACHE_INDEX_SIZE=2G]
 ```

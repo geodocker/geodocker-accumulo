@@ -32,7 +32,10 @@ do
             INSTANCE_NAME="${i#*=}"
             shift
             ;;
-
+        -e=*|--env=*)
+            ENV_VARS+=("-e ${i#*=}")
+            shift
+            ;;
         *)
             ;;
     esac
@@ -67,6 +70,7 @@ DOCKER_ENV="-e USER=hadoop \
 -e ACCUMULO_SECRET=$ACCUMULO_SECRET \
 -e ACCUMULO_PASSWORD=$ACCUMULO_PASSWORD \
 -e INSTANCE_NAME=$INSTANCE_NAME \
+${ENV_VARS[@]} \
 -v /etc/hadoop/conf:/etc/hadoop/conf \
 -v /usr/lib/hadoop-hdfs/bin:/usr/lib/hadoop-hdfs/bin"
 
