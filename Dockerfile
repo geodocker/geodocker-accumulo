@@ -1,4 +1,4 @@
-FROM quay.io/geodocker/hdfs:latest
+FROM quay.io/geodocker/hdfs:0.1
 
 MAINTAINER Pomadchin Grigory <daunnc@gmail.com>
 
