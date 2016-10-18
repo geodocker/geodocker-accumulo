@@ -3,8 +3,16 @@ set -euo pipefail
 IFS=$'\n\t'
 source /sbin/accumulo-lib.sh
 
-ACCUMULO_SECRET=${ACCUMULO_SECRET:-DEFAULT}
-INSTANCE_NAME=${INSTANCE_NAME:-accumulo}
+# Set default configurations if not provided
+: ${ACCUMULO_SECRET:=DEFAULT}
+: ${INSTANCE_NAME:=accumulo}
+: ${TSERVER_CACHE_DATA_SIZE:=128MB}
+: ${TSERVER_CACHE_INDEX_SIZE:=128MB}
+: ${TSERVER_MEMORY_MAPS_MAX:=1G}
+: ${TSERVER_XMX:=3g}
+: ${MASTER_XMX:=2g}
+: ${MONITOR_XMX:=1g}
+: ${GC_XMX:=1g}
 
 # HDFS Configuration
 template $HADOOP_CONF_DIR/core-site.xml
@@ -24,19 +32,19 @@ else
   case $ROLE in
     "master" | "tserver" | "monitor" | "gc" | "tracer")
       ATTEMPTS=7 # ~2 min before timeout failure
-      with_backoff zookeeper_is_available || exit 1
+      with_backoff zookeeper_is_available "$ZOOKEEPERS" || exit 1
       wait_until_hdfs_is_available || exit 1
 
       USER=${USER:-root}
       ensure_user $USER
       echo "Running as $USER"
 
-      # Initilize Accumulo if required
+      # Initialize Accumulo if required
       if [[ ($ROLE = "master") && (${2:-} = "--auto-init")]]; then
-        if accumulo_instance_exists $INSTANCE_NAME; then
+        if accumulo_instance_exists $INSTANCE_NAME $ZOOKEEPERS; then
           echo "Found accumulo instance at: $INSTANCE_VOLUME"
         else
-          echo "Initilizing accumulo instance $INSTANCE_VOLUME ..."
+          echo "Initializing accumulo instance $INSTANCE_VOLUME ..."
           runuser -p -u $USER hdfs -- dfs -mkdir -p ${INSTANCE_VOLUME}-classpath
           runuser -p -u $USER accumulo -- init --instance-name ${INSTANCE_NAME} --password ${ACCUMULO_PASSWORD}
 
@@ -48,7 +56,7 @@ else
       fi
 
       if [[ $ROLE != "master" ]]; then
-        with_backoff accumulo_instance_exists $INSTANCE_NAME || exit 1
+        with_backoff accumulo_instance_exists $INSTANCE_NAME $ZOOKEEPERS || exit 1
       fi
 
       exec runuser -p -u $USER accumulo -- $ROLE ;;

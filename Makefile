@@ -20,7 +20,7 @@ test: build
 	docker-compose up -d
 	docker-compose run --rm accumulo-master bash -c "set -e \
 		&& source /sbin/accumulo-lib.sh \
-		&& wait_until_accumulo_is_available \
+		&& wait_until_accumulo_is_available accumulo zookeeper \
 		&& accumulo shell -p GisPwd -e 'info'"
 	docker-compose down
 
