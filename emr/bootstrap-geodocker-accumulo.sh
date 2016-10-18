@@ -70,7 +70,7 @@ DOCKER_ENV="-e USER=hadoop \
 -v /etc/hadoop/conf:/etc/hadoop/conf \
 -v /usr/lib/hadoop-hdfs/bin:/usr/lib/hadoop-hdfs/bin"
 
-DOCKER_OPT="-d --net=host --restart=always"
+DOCKER_OPT="-d --net=host --restart=always --memory-swappiness=0"
 if is_master ; then
     docker run $DOCKER_OPT --name=accumulo-master $DOCKER_ENV $IMAGE master --auto-init
     docker run $DOCKER_OPT --name=accumulo-monitor $DOCKER_ENV $IMAGE monitor
