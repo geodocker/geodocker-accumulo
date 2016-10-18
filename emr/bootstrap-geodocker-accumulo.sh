@@ -67,7 +67,8 @@ DOCKER_ENV="-e USER=hadoop \
 -e ACCUMULO_SECRET=$ACCUMULO_SECRET \
 -e ACCUMULO_PASSWORD=$ACCUMULO_PASSWORD \
 -e INSTANCE_NAME=$INSTANCE_NAME \
--v /etc/hadoop/conf:/etc/hadoop/conf"
+-v /etc/hadoop/conf:/etc/hadoop/conf \
+-v /usr/lib/hadoop-hdfs/bin:/usr/lib/hadoop-hdfs/bin"
 
 DOCKER_OPT="-d --net=host --restart=always"
 if is_master ; then
