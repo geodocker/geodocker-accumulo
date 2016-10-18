@@ -69,7 +69,7 @@
   </property>
   <property>
     <name>tserver.memory.maps.max</name>
-    <value>1G</value>
+    <value>${TSERVER_MEMORY_MAPS_MAX}</value>
   </property>
   <property>
     <name>tserver.memory.maps.native.enabled</name>
@@ -77,11 +77,11 @@
   </property>
   <property>
     <name>tserver.cache.data.size</name>
-    <value>128M</value>
+    <value>${TSERVER_CACHE_DATA_SIZE}</value>
   </property>
   <property>
     <name>tserver.cache.index.size</name>
-    <value>128M</value>
+    <value>${TSERVER_CACHE_INDEX_SIZE}</value>
   </property>
   <property>
     <name>trace.user</name>
