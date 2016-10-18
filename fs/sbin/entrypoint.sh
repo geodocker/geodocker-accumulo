@@ -6,8 +6,8 @@ source /sbin/accumulo-lib.sh
 # Set default configurations if not provided
 : ${ACCUMULO_SECRET:=DEFAULT}
 : ${INSTANCE_NAME:=accumulo}
-: ${TSERVER_CACHE_DATA_SIZE:=128MB}
-: ${TSERVER_CACHE_INDEX_SIZE:=128MB}
+: ${TSERVER_CACHE_DATA_SIZE:=128M}
+: ${TSERVER_CACHE_INDEX_SIZE:=128M}
 : ${TSERVER_MEMORY_MAPS_MAX:=1G}
 : ${TSERVER_XMX:=3g}
 : ${MASTER_XMX:=2g}
