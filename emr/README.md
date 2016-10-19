@@ -24,12 +24,12 @@ aws emr create-cluster --name "GeoDocker Accumulo" \
 --output text \
 --use-default-roles \
 --ec2-attributes KeyName=geotrellis-cluster \
---applications Name=Hadoop Name=Zookeeper-Sandbox \
+--applications Name=Hadoop Name=Zookeeper \
 --instance-groups \
 Name=Master,BidPrice=0.5,InstanceCount=1,InstanceGroupType=MASTER,InstanceType=m3.xlarge \
 Name=Workers,BidPrice=0.5,InstanceCount=1,InstanceGroupType=CORE,InstanceType=m3.xlarge \
 --bootstrap-actions \
-Name=BootstrapGeoWave,Path=s3://geotrellis-test/geodocker/bootstrap-geodocker-accumulo.sh,\
+Name=BootstrapGeoWave,Path=s3://geotrellis-test/geodocker/accumulo-0.2/bootstrap-geodocker-accumulo.sh,\
 Args=[-i=quay.io/geodocker/accumulo:latest,-n=gis,-p=secret,\
 -e=TSERVER_XMX=10G,-e=TSERVER_CACHE_DATA_SIZE=6G,-e=TSERVER_CACHE_INDEX_SIZE=2G]
 ```
