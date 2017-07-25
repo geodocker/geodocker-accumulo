@@ -2,7 +2,7 @@ BASE := $(subst -, ,$(notdir ${CURDIR}))
 ORG  := $(word 1, ${BASE})
 REPO := $(word 2, ${BASE})
 IMG  := quay.io/${ORG}/${REPO}
-ACCUMULO_VERSION := 1.7.2
+ACCUMULO_VERSION := 1.7.3
 
 build: accumulo-${ACCUMULO_VERSION}-bin.tar.gz
 	docker build \
@@ -10,7 +10,7 @@ build: accumulo-${ACCUMULO_VERSION}-bin.tar.gz
 		-t ${IMG}:latest .
 
 accumulo-${ACCUMULO_VERSION}-bin.tar.gz:
-	curl -L -C - -O "http://apache.mirrors.pair.com/accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz"
+	curl -L -C - -O "http://apache.mirrors.lucidnetworks.net/accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz"
 
 publish: build
 	docker push ${IMG}:latest
